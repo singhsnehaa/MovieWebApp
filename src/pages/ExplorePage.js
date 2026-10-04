@@ -24,11 +24,11 @@ const ExplorePage = () => {
     }
   }, [pageNo, params.explore]);
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-      setPageNo((preve) => preve + 1);
+      setPageNo((prev) => prev + 1);
     }
-  };
+  }, []);
 
   useEffect(() => {
     setPageNo(1);
@@ -38,7 +38,7 @@ const ExplorePage = () => {
   useEffect(() => {
     if (!params.explore) return;
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, params.explore]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -53,15 +53,13 @@ const ExplorePage = () => {
         </h3>
 
         <div className="grid grid-cols-[repeat(auto-fit,230px)] gap-6 justify-center lg:justify-start">
-          {data.map((exploreData, index) => {
-            return (
-              <Card
-                data={exploreData}
-                key={exploreData.id + "exploreSEction"}
-                media_type={params.explore}
-              />
-            );
-          })}
+          {data.map((exploreData) => (
+            <Card
+              data={exploreData}
+              key={exploreData.id + "exploreSEction"}
+              media_type={params.explore}
+            />
+          ))}
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-// src/pages/SearchPage.js
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -40,13 +39,13 @@ const SearchPage = () => {
   useEffect(() => {
     if (!query) return;
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, query]);
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
       setPage((prev) => prev + 1);
     }
-  };
+  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);

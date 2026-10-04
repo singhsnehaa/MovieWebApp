@@ -19,7 +19,7 @@ const useFetchDetails = (endpoint) => {
 
   useEffect(() => {
     fetchData();
-  }, [endpoint]);
+  }, [fetchData]);
 
   return { data, loading };
 };
