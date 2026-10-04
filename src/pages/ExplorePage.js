@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import Card from "../components/Card";
 
@@ -8,20 +8,21 @@ const ExplorePage = () => {
   const [pageNo, setPageNo] = useState(1);
   const [data, setData] = useState([]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get(`/discover/${params.explore}`, {
-        params: {
-          page: pageNo,
-        },
+        params: { page: pageNo },
       });
-      setData((preve) => {
-        return [...preve, ...response.data.results];
-      });
+
+      setData((prev) =>
+        pageNo === 1
+          ? response.data.results
+          : [...prev, ...response.data.results],
+      );
     } catch (error) {
       console.log("error from Explore Page", error);
     }
-  };
+  }, [pageNo, params.explore]);
 
   const handleScroll = () => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
@@ -30,18 +31,19 @@ const ExplorePage = () => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [pageNo]);
-
-  useEffect(() => {
     setPageNo(1);
     setData([]);
-    fetchData();
   }, [params.explore]);
 
   useEffect(() => {
+    if (!params.explore) return;
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-  }, []);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   return (
     <div className="py-16">

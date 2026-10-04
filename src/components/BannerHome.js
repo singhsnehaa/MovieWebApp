@@ -44,6 +44,7 @@ const BannerHome = () => {
               <div className="w-full h-full">
                 <img
                   src={imageURL + data.backdrop_path}
+                  alt={data?.title || data?.name || "Movie banner"}
                   className="h-full w-full object-cover"
                 />
               </div>
